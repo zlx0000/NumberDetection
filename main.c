@@ -5,7 +5,7 @@
 #include <pthread.h>
 #include <FreeImage.h>
 
-float l0[784];
+float *l0;
 float l1[16];
 float l2[16];
 float l3[10];
@@ -232,6 +232,22 @@ void process_l3()
 	}
 }
 
+void train()
+{
+	load_train();
+	int i, j;
+	float loss[10];
+	for (i = 0; i < 60000; i++)
+	{
+		l0 = train_sets[i];
+		process();
+		for (j = 0; j < 10; j++)
+		{
+			loss[j] = l3[j] - train_sets_lables[i][j];
+		}
+	}
+}
+
 void randomize()
 {
 	int i, j;
@@ -273,6 +289,7 @@ int main(int argc, char **argv)
 	init();
 	randomize();
 	load_train();
+	l0 = train_sets[0];
 	process();
 	return 0;
 }
