@@ -51,7 +51,7 @@ void load_train()
 	FILE *fp_image_train = fopen("./train-images.idx3-ubyte", "r");
 }
 
-void load_file(const char filenane)
+void load_file(const char *filenane)
 {
 	int x, y, k = 0;
 	FIBITMAP *img = FreeImage_Load(FIF_BMP, filenane, BMP_DEFAULT);
