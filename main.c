@@ -21,7 +21,7 @@ float b32[10];
 float train_sets[60000][784];
 float train_sets_lables[60000][10] = {0};
 
-float *(loss)[13002];
+float *(p_and_b)[13002];
 
 float sigmoid(float x)
 {
@@ -72,7 +72,7 @@ void init()
 	{
 		for (j = 0; j < 784; j++)
 		{
-			loss[k] = &(p10[i][j]);
+			p_and_b[k] = &(p10[i][j]);
 			k++;
 		}
 	}
@@ -80,7 +80,7 @@ void init()
 	{
 		for (j = 0; j < 16; j++)
 		{
-			loss[k] = &(p21[i][j]);
+			p_and_b[k] = &(p21[i][j]);
 			k++;
 		}
 	}
@@ -88,23 +88,23 @@ void init()
 	{
 		for (j = 0; j < 16; j++)
 		{
-			loss[k] = &(p32[i][j]);
+			p_and_b[k] = &(p32[i][j]);
 			k++;
 		}
 	}
 	for (i = 0; i < 16; i++)
 	{
-		loss[k] = &(b10[i]);
+		p_and_b[k] = &(b10[i]);
 		k++;
 	}
 	for (i = 0; i < 16; i++)
 	{
-		loss[k] = &(b21[i]);
+		p_and_b[k] = &(b21[i]);
 		k++;
 	}
 	for (i = 0; i < 10; i++)
 	{
-		loss[k] = &(b32[i]);
+		p_and_b[k] = &(b32[i]);
 		k++;
 	}
 }
