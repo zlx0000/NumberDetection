@@ -1,1 +1,2 @@
 # NumbersRecognition
+dependencies: libfreeimage-dev
