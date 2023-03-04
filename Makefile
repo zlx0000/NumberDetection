@@ -1,4 +1,4 @@
 debug:
-	gcc main.c -o main -ggdb3 -mavx -lm -lpthread
+	gcc main.c -o main -g -mavx -lm -lpthread
 release:
-	gcc main.c -o main -ggdb3 -mavx -lm -lpthread -O3
+	gcc main.c -o main -g -mavx -lm -lpthread -O3
