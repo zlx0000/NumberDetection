@@ -10,9 +10,9 @@ float l1[16];
 float l2[16];
 float l3[10];
 
-float p10[16][784];
-float p21[16][16];
-float p32[10][16];
+float w10[16][784];
+float w21[16][16];
+float w32[10][16];
 
 float b10[16];
 float b21[16];
@@ -21,7 +21,7 @@ float b32[10];
 float train_sets[60000][784];
 float train_sets_lables[60000][10] = {0};
 
-float *(p_and_b)[13002];
+float *(w_and_b)[13002];
 
 float sigmoid(float x)
 {
@@ -96,7 +96,7 @@ void init()
 	{
 		for (j = 0; j < 784; j++)
 		{
-			p_and_b[k] = &(p10[i][j]);
+			w_and_b[k] = &(w10[i][j]);
 			k++;
 		}
 	}
@@ -104,7 +104,7 @@ void init()
 	{
 		for (j = 0; j < 16; j++)
 		{
-			p_and_b[k] = &(p21[i][j]);
+			w_and_b[k] = &(w21[i][j]);
 			k++;
 		}
 	}
@@ -112,23 +112,23 @@ void init()
 	{
 		for (j = 0; j < 16; j++)
 		{
-			p_and_b[k] = &(p32[i][j]);
+			w_and_b[k] = &(w32[i][j]);
 			k++;
 		}
 	}
 	for (i = 0; i < 16; i++)
 	{
-		p_and_b[k] = &(b10[i]);
+		w_and_b[k] = &(b10[i]);
 		k++;
 	}
 	for (i = 0; i < 16; i++)
 	{
-		p_and_b[k] = &(b21[i]);
+		w_and_b[k] = &(b21[i]);
 		k++;
 	}
 	for (i = 0; i < 10; i++)
 	{
-		p_and_b[k] = &(b32[i]);
+		w_and_b[k] = &(b32[i]);
 		k++;
 	}
 }
@@ -136,7 +136,7 @@ void init()
 void process_l1()
 {
 	int i, j;
-	__m256 p10p[16][98], l0p[98], l1m[16][98];
+	__m256 w10p[16][98], l0p[98], l1m[16][98];
 	for (j = 0; j < 98; j++)
 	{
 		l0p[j] = _mm256_setr_ps(l0[j * 8], l0[j * 8 + 1], l0[j * 8 + 2], l0[j * 8 + 3], l0[j * 8 + 4], l0[j * 8 + 5], l0[j * 8 + 6], l0[j * 8 + 7]);
@@ -145,14 +145,14 @@ void process_l1()
 	{
 		for (j = 0; j < 98; j++)
 		{
-			p10p[i][j] = _mm256_setr_ps(p10[i][j * 8], p10[i][j * 8 + 1], p10[i][j * 8 + 2], p10[i][j * 8 + 3], p10[i][j * 8 + 4], p10[i][j * 8 + 5], p10[i][j * 8 + 6], p10[i][j * 8 + 7]);
+			w10p[i][j] = _mm256_setr_ps(w10[i][j * 8], w10[i][j * 8 + 1], w10[i][j * 8 + 2], w10[i][j * 8 + 3], w10[i][j * 8 + 4], w10[i][j * 8 + 5], w10[i][j * 8 + 6], w10[i][j * 8 + 7]);
 		}
 	}
 	for (i = 0; i < 16; i++)
 	{
 		for (j = 0; j < 98; j++)
 		{
-			l1m[i][j] = _mm256_mul_ps(p10p[i][j], l0p[j]);
+			l1m[i][j] = _mm256_mul_ps(w10p[i][j], l0p[j]);
 		}
 	}
 	for (i = 0; i < 16; i++)
@@ -171,7 +171,7 @@ void process_l1()
 void process_l2()
 {
 	int i, j;
-	__m256 p21p[16][2], l1p[2], l2m[16][2];
+	__m256 w21p[16][2], l1p[2], l2m[16][2];
 	for (j = 0; j < 2; j++)
 	{
 		l1p[j] = _mm256_setr_ps(l1[j * 8], l1[j * 8 + 1], l1[j * 8 + 2], l1[j * 8 + 3], l1[j * 8 + 4], l1[j * 8 + 5], l1[j * 8 + 6], l1[j * 8 + 7]);
@@ -180,14 +180,14 @@ void process_l2()
 	{
 		for (j = 0; j < 2; j++)
 		{
-			p21p[i][j] = _mm256_setr_ps(p21[i][j * 8], p21[i][j * 8 + 1], p21[i][j * 8 + 2], p21[i][j * 8 + 3], p21[i][j * 8 + 4], p21[i][j * 8 + 5], p21[i][j * 8 + 6], p21[i][j * 8 + 7]);
+			w21p[i][j] = _mm256_setr_ps(w21[i][j * 8], w21[i][j * 8 + 1], w21[i][j * 8 + 2], w21[i][j * 8 + 3], w21[i][j * 8 + 4], w21[i][j * 8 + 5], w21[i][j * 8 + 6], w21[i][j * 8 + 7]);
 		}
 	}
 	for (i = 0; i < 16; i++)
 	{
 		for (j = 0; j < 2; j++)
 		{
-			l2m[i][j] = _mm256_mul_ps(p21p[i][j], l1p[j]);
+			l2m[i][j] = _mm256_mul_ps(w21p[i][j], l1p[j]);
 		}
 	}
 	for (i = 0; i < 16; i++)
@@ -203,7 +203,7 @@ void process_l2()
 void process_l3()
 {
 	int i, j;
-	__m256 p32p[10][2], l2p[2], l3m[10][2];
+	__m256 w32p[10][2], l2p[2], l3m[10][2];
 	for (j = 0; j < 2; j++)
 	{
 		l2p[j] = _mm256_setr_ps(l2[j * 8], l2[j * 8 + 1], l2[j * 8 + 2], l2[j * 8 + 3], l2[j * 8 + 4], l2[j * 8 + 5], l2[j * 8 + 6], l2[j * 8 + 7]);
@@ -212,14 +212,14 @@ void process_l3()
 	{
 		for (j = 0; j < 2; j++)
 		{
-			p32p[i][j] = _mm256_setr_ps(p32[i][j * 8], p32[i][j * 8 + 1], p32[i][j * 8 + 2], p32[i][j * 8 + 3], p32[i][j * 8 + 4], p32[i][j * 8 + 5], p32[i][j * 8 + 6], p32[i][j * 8 + 7]);
+			w32p[i][j] = _mm256_setr_ps(w32[i][j * 8], w32[i][j * 8 + 1], w32[i][j * 8 + 2], w32[i][j * 8 + 3], w32[i][j * 8 + 4], w32[i][j * 8 + 5], w32[i][j * 8 + 6], w32[i][j * 8 + 7]);
 		}
 	}
 	for (i = 0; i < 10; i++)
 	{
 		for (j = 0; j < 2; j++)
 		{
-			l3m[i][j] = _mm256_mul_ps(p32p[i][j], l2p[j]);
+			l3m[i][j] = _mm256_mul_ps(w32p[i][j], l2p[j]);
 		}
 	}
 	for (i = 0; i < 10; i++)
@@ -263,7 +263,7 @@ void randomize()
 		b10[i] = 2 * (((float)rand() / (float)RAND_MAX) - 0.5);
 		for (j = 0; j < 784; j++)
 		{
-			p10[i][j] = 2 * (((float)rand() / (float)RAND_MAX) - 0.5);
+			w10[i][j] = 2 * (((float)rand() / (float)RAND_MAX) - 0.5);
 		}
 	}
 	for (i = 0; i < 16; i++)
@@ -271,7 +271,7 @@ void randomize()
 		b21[i] = 2 * (((float)rand() / (float)RAND_MAX) - 0.5);
 		for (j = 0; j < 16; j++)
 		{
-			p21[i][j] = 2 * (((float)rand() / (float)RAND_MAX) - 0.5);
+			w21[i][j] = 2 * (((float)rand() / (float)RAND_MAX) - 0.5);
 		}
 	}
 	for (i = 0; i < 10; i++)
@@ -279,7 +279,7 @@ void randomize()
 		b32[i] = 2 * (((float)rand() / (float)RAND_MAX) - 0.5);
 		for (j = 0; j < 16; j++)
 		{
-			p32[i][j] = 2 * (((float)rand() / (float)RAND_MAX) - 0.5);
+			w32[i][j] = 2 * (((float)rand() / (float)RAND_MAX) - 0.5);
 		}
 	}
 }
