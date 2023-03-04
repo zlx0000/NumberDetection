@@ -1,2 +1,2 @@
-# NumbersRecognition
+# NumbersDetection
 dependencies: libfreeimage-dev
