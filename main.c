@@ -173,30 +173,30 @@ void randomize()
 	int i, j;
 	for (i = 0; i < 784; i++)
 	{
-		l0[i] = ((float)rand() / (float)RAND_MAX);
+		l0[i] = 2 * (((float)rand() / (float)RAND_MAX) - 0.5);
 	}
 	for (i = 0; i < 16; i++)
 	{
-		b10[i] = ((float)rand() / (float)RAND_MAX);
+		b10[i] = 2 * (((float)rand() / (float)RAND_MAX) - 0.5);
 		for (j = 0; j < 784; j++)
 		{
-			p10[i][j] = ((float)rand() / (float)RAND_MAX);
+			p10[i][j] = 2 * (((float)rand() / (float)RAND_MAX) - 0.5);
 		}
 	}
 	for (i = 0; i < 16; i++)
 	{
-		b21[i] = ((float)rand() / (float)RAND_MAX);
+		b21[i] = 2 * (((float)rand() / (float)RAND_MAX) - 0.5);
 		for (j = 0; j < 16; j++)
 		{
-			p21[i][j] = ((float)rand() / (float)RAND_MAX);
+			p21[i][j] = 2 * (((float)rand() / (float)RAND_MAX) - 0.5);
 		}
 	}
 	for (i = 0; i < 10; i++)
 	{
-		b32[i] = ((float)rand() / (float)RAND_MAX);
+		b32[i] = 2 * (((float)rand() / (float)RAND_MAX) - 0.5);
 		for (j = 0; j < 16; j++)
 		{
-			p32[i][j] = ((float)rand() / (float)RAND_MAX);
+			p32[i][j] = 2 * (((float)rand() / (float)RAND_MAX) - 0.5);
 		}
 	}
 }
