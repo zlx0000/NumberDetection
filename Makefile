@@ -10,7 +10,7 @@ sigmoid.o: sigmoid.c sigmoid.h
 	gcc -c sigmoid.c -o sigmoid.o -g -lm
 
 main: main.c process.o gradient.o sigmoid.o
-	gcc -c main.c process.o gradient.o sigmoid.o -o main -g -lpthread -lfreeimage 
+	gcc main.c process.o gradient.o sigmoid.o -o main -g -lpthread -lfreeimage 
 
 clean:
 	rm main
