@@ -69,7 +69,7 @@ void load_train()
 		for (j = 0; j < 784; j++)
 		{
 			pixel = fgetc(fp_image_train);
-			train_sets[i][j] = ((unsigned int)pixel);
+			train_sets[i][j] = ((float)((unsigned int)pixel)) / 255.0;
 		}
 	}
 	fclose(fp_image_train);
@@ -243,14 +243,14 @@ void train()
 {
 	load_train();
 	int i, j;
-	float loss[10];
+	float cost[10];
 	for (i = 0; i < 60000; i++)
 	{
 		l0 = train_sets[i];
 		process();
 		for (j = 0; j < 10; j++)
 		{
-			loss[j] = l3[j] - train_sets_lables[i][j];
+			cost[j] = l3[j] - train_sets_lables[i][j];
 		}
 	}
 }
