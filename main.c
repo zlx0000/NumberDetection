@@ -42,13 +42,36 @@ float ReLU(float x)
 
 void load_train()
 {
+	int i, j, lable, pixel;
 	FILE *fp_lable_train = fopen("./train-images.idx3-ubyte", "r");
 	if (!fp_lable_train)
 	{
 		perror("fopen");
 		exit(EXIT_FAILURE);
 	}
+	fseek(fp_lable_train, 8, SEEK_SET);
+	for (i = 0; i < 60000; i++)
+	{
+		fread(&lable, 1, 1, fp_lable_train);
+		train_sets_lables[i][lable] = 1.0;
+	}
+	fclose(fp_lable_train);
 	FILE *fp_image_train = fopen("./train-images.idx3-ubyte", "r");
+	if (!fp_image_train)
+	{
+		perror("fopen");
+		exit(EXIT_FAILURE);
+	}
+	fseek(fp_image_train, 16, SEEK_SET);
+	for (i = 0; i < 60000; i++)
+	{
+		for (j = 0; j < 784; j++)
+		{
+			fread(&pixel, 1, 1, fp_image_train);
+			train_sets[i][j] = ((float)pixel/255.0);
+		}
+	}
+	fclose(fp_image_train);
 }
 
 void load_file(const char *filenane)
