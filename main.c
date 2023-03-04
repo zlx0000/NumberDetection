@@ -234,10 +234,6 @@ void process_l3()
 void randomize()
 {
 	int i, j;
-	for (i = 0; i < 784; i++)
-	{
-		l0[i] = 2 * (((float)rand() / (float)RAND_MAX) - 0.5);
-	}
 	for (i = 0; i < 16; i++)
 	{
 		b10[i] = 2 * (((float)rand() / (float)RAND_MAX) - 0.5);
@@ -275,6 +271,7 @@ int main(int argc, char **argv)
 {
 	init();
 	randomize();
+	load_train();
 	process();
 	return 0;
 }
