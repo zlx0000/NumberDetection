@@ -136,6 +136,16 @@ void init()
 
 void gradient_l1()
 {
+
+}
+
+void gradient_l2()
+{
+
+}
+
+void gradient_l3()
+{
 	
 }
 
