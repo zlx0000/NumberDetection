@@ -18,6 +18,9 @@ float b10[16];
 float b21[16];
 float b32[10];
 
+float train_sets[60000][784];
+float train_sets_lables[60000][10] = {0};
+
 float *(loss)[13002];
 
 float sigmoid(float x)
@@ -34,6 +37,31 @@ float ReLU(float x)
 	else
 	{
 		return x;
+	}
+}
+
+void load_train()
+{
+	FILE *fp_lable_train = fopen("./train-images.idx3-ubyte", "r");
+	if (!fp_lable_train)
+	{
+		perror("fopen");
+		exit(EXIT_FAILURE);
+	}
+	FILE *fp_image_train = fopen("./train-images.idx3-ubyte", "r");
+}
+
+void load_file(const char filenane)
+{
+	int x, y, k = 0;
+	FIBITMAP *img = FreeImage_Load(FIF_BMP, filenane, BMP_DEFAULT);
+	for (y = 0; y < 28; y++)
+	{
+		for (x = 0; k < 28; x++)
+		{
+			l0[k] =
+				k++;
+		}
 	}
 }
 
