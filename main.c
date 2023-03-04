@@ -42,8 +42,9 @@ float ReLU(float x)
 
 void load_train()
 {
-	int i, j, lable, pixel;
-	FILE *fp_lable_train = fopen("./train-images.idx3-ubyte", "r");
+	int i, j;
+	uint8_t lable, pixel;
+	FILE *fp_lable_train = fopen("./train-labels.idx1-ubyte", "r");
 	if (!fp_lable_train)
 	{
 		perror("fopen");
@@ -52,8 +53,8 @@ void load_train()
 	fseek(fp_lable_train, 8, SEEK_SET);
 	for (i = 0; i < 60000; i++)
 	{
-		fread(&lable, 1, 1, fp_lable_train);
-		train_sets_lables[i][lable] = 1.0;
+		lable = fgetc(fp_lable_train);
+		train_sets_lables[i][(unsigned int)lable] = 1.0;
 	}
 	fclose(fp_lable_train);
 	FILE *fp_image_train = fopen("./train-images.idx3-ubyte", "r");
@@ -67,8 +68,8 @@ void load_train()
 	{
 		for (j = 0; j < 784; j++)
 		{
-			fread(&pixel, 1, 1, fp_image_train);
-			train_sets[i][j] = ((float)pixel/255.0);
+			pixel = fgetc(fp_image_train);
+			train_sets[i][j] = ((unsigned int)pixel);
 		}
 	}
 	fclose(fp_image_train);
