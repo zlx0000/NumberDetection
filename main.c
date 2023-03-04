@@ -232,6 +232,13 @@ void process_l3()
 	}
 }
 
+void process()
+{
+	process_l1();
+	process_l2();
+	process_l3();
+}
+
 void train()
 {
 	load_train();
@@ -275,13 +282,6 @@ void randomize()
 			p32[i][j] = 2 * (((float)rand() / (float)RAND_MAX) - 0.5);
 		}
 	}
-}
-
-void process()
-{
-	process_l1();
-	process_l2();
-	process_l3();
 }
 
 int main(int argc, char **argv)
