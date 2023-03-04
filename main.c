@@ -22,7 +22,7 @@ float train_sets[60000][784];
 float train_sets_lables[60000][10] = {0};
 
 float *all[13002];
-float grad[100];
+float grad[13002];
 
 float sigmoid(float x)
 {
@@ -132,6 +132,11 @@ void init()
 		all[k] = &(b32[i]);
 		k++;
 	}
+}
+
+void gradient_l1()
+{
+	
 }
 
 void gradient()
