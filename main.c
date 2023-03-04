@@ -21,7 +21,8 @@ float b32[10];
 float train_sets[60000][784];
 float train_sets_lables[60000][10] = {0};
 
-float *(w_and_b)[13002];
+float *all[13002];
+float grad[100];
 
 float sigmoid(float x)
 {
@@ -96,7 +97,7 @@ void init()
 	{
 		for (j = 0; j < 784; j++)
 		{
-			w_and_b[k] = &(w10[i][j]);
+			all[k] = &(w10[i][j]);
 			k++;
 		}
 	}
@@ -104,7 +105,7 @@ void init()
 	{
 		for (j = 0; j < 16; j++)
 		{
-			w_and_b[k] = &(w21[i][j]);
+			all[k] = &(w21[i][j]);
 			k++;
 		}
 	}
@@ -112,25 +113,32 @@ void init()
 	{
 		for (j = 0; j < 16; j++)
 		{
-			w_and_b[k] = &(w32[i][j]);
+			all[k] = &(w32[i][j]);
 			k++;
 		}
 	}
 	for (i = 0; i < 16; i++)
 	{
-		w_and_b[k] = &(b10[i]);
+		all[k] = &(b10[i]);
 		k++;
 	}
 	for (i = 0; i < 16; i++)
 	{
-		w_and_b[k] = &(b21[i]);
+		all[k] = &(b21[i]);
 		k++;
 	}
 	for (i = 0; i < 10; i++)
 	{
-		w_and_b[k] = &(b32[i]);
+		all[k] = &(b32[i]);
 		k++;
 	}
+}
+
+void gradient()
+{
+	gradient_l1();
+	gradient_l2();
+	gradient_l3();
 }
 
 void process_l1()
@@ -243,14 +251,14 @@ void train()
 {
 	load_train();
 	int i, j;
-	float cost[10];
+	float cost = 0;
 	for (i = 0; i < 60000; i++)
 	{
 		l0 = train_sets[i];
 		process();
 		for (j = 0; j < 10; j++)
 		{
-			cost[j] = l3[j] - train_sets_lables[i][j];
+			cost += (l3[j] - train_sets_lables[i][j]) * (l3[j] - train_sets_lables[i][j]);
 		}
 	}
 }
@@ -258,29 +266,9 @@ void train()
 void randomize()
 {
 	int i, j;
-	for (i = 0; i < 16; i++)
+	for (i = 0; i < 13002; i++)
 	{
-		b10[i] = 2 * (((float)rand() / (float)RAND_MAX) - 0.5);
-		for (j = 0; j < 784; j++)
-		{
-			w10[i][j] = 2 * (((float)rand() / (float)RAND_MAX) - 0.5);
-		}
-	}
-	for (i = 0; i < 16; i++)
-	{
-		b21[i] = 2 * (((float)rand() / (float)RAND_MAX) - 0.5);
-		for (j = 0; j < 16; j++)
-		{
-			w21[i][j] = 2 * (((float)rand() / (float)RAND_MAX) - 0.5);
-		}
-	}
-	for (i = 0; i < 10; i++)
-	{
-		b32[i] = 2 * (((float)rand() / (float)RAND_MAX) - 0.5);
-		for (j = 0; j < 16; j++)
-		{
-			w32[i][j] = 2 * (((float)rand() / (float)RAND_MAX) - 0.5);
-		}
+		*all[i] = (((float)rand() / (float)RAND_MAX) - 0.5);
 	}
 }
 
