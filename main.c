@@ -156,7 +156,7 @@ void gradient()
 	gradient_l3();
 }
 
-void process_l1()
+void forward_l1()
 {
 	int i, j;
 	__m256 w10p[16][98], l0p[98], l1m[16][98];
@@ -191,7 +191,7 @@ void process_l1()
 	}
 }
 
-void process_l2()
+void forward_l2()
 {
 	int i, j;
 	__m256 w21p[16][2], l1p[2], l2m[16][2];
@@ -223,7 +223,7 @@ void process_l2()
 	}
 }
 
-void process_l3()
+void forward_l3()
 {
 	int i, j;
 	__m256 w32p[10][2], l2p[2], l3m[10][2];
@@ -255,11 +255,11 @@ void process_l3()
 	}
 }
 
-void process()
+void forward()
 {
-	process_l1();
-	process_l2();
-	process_l3();
+	forward_l1();
+	forward_l2();
+	forward_l3();
 }
 
 void train()
@@ -270,7 +270,7 @@ void train()
 	for (i = 0; i < 60000; i++)
 	{
 		l0 = train_sets[i];
-		process();
+		forward();
 		for (j = 0; j < 10; j++)
 		{
 			cost += (l3[j] - train_sets_lables[i][j]) * (l3[j] - train_sets_lables[i][j]);
@@ -290,9 +290,10 @@ void randomize()
 int main(int argc, char **argv)
 {
 	init();
-	randomize();
-	load_train();
-	l0 = train_sets[0];
-	process();
+//	randomize();
+//	load_train();
+	train();
+//	l0 = train_sets[0];
+//	forward();
 	return 0;
 }
