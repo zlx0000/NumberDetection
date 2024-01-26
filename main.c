@@ -3,7 +3,7 @@
 #include <immintrin.h>
 #include <math.h>
 #include <pthread.h>
-#include <FreeImage.h>
+//#include <FreeImage.h>
 
 float *l0;
 float l1[16];
@@ -18,6 +18,10 @@ float b10[16];
 float b21[16];
 float b32[10];
 
+float *y_3;
+float y_2[16];
+float y_1[16];
+
 float train_sets[60000][784];
 float train_sets_lables[60000][10] = {0};
 
@@ -27,6 +31,11 @@ float grad[13002];
 float sigmoid(float x)
 {
 	return 1 / (1 + exp(-1 * x));
+}
+
+float sigmoid_d(float x)
+{
+	return sigmoid(x) * (1 - sigmoid(x));
 }
 
 float ReLU(float x)
@@ -44,7 +53,7 @@ float ReLU(float x)
 void load_train()
 {
 	int i, j;
-	uint8_t lable, pixel;
+	unsigned char lable, pixel;
 	FILE *fp_lable_train = fopen("./train-labels.idx1-ubyte", "r");
 	if (!fp_lable_train)
 	{
@@ -76,6 +85,7 @@ void load_train()
 	fclose(fp_image_train);
 }
 
+/*
 void load_file(const char *filenane)
 {
 	int x, y, k = 0;
@@ -89,6 +99,7 @@ void load_file(const char *filenane)
 		}
 	}
 }
+*/
 
 void init()
 {
@@ -134,6 +145,7 @@ void init()
 	}
 }
 
+/*
 void gradient_l1()
 {
 
@@ -141,7 +153,7 @@ void gradient_l1()
 
 void gradient_l2()
 {
-
+	
 }
 
 void gradient_l3()
@@ -155,11 +167,15 @@ void gradient()
 	gradient_l2();
 	gradient_l3();
 }
+*/
+
+__m256 w10p[16][98], l0p[98], l1m[16][98];
+__m256 w21p[16][2], l1p[2], l2m[16][2];
+__m256 w32p[10][2], l2p[2], l3m[10][2];
 
 void forward_l1()
 {
 	int i, j;
-	__m256 w10p[16][98], l0p[98], l1m[16][98];
 	for (j = 0; j < 98; j++)
 	{
 		l0p[j] = _mm256_setr_ps(l0[j * 8], l0[j * 8 + 1], l0[j * 8 + 2], l0[j * 8 + 3], l0[j * 8 + 4], l0[j * 8 + 5], l0[j * 8 + 6], l0[j * 8 + 7]);
@@ -194,7 +210,6 @@ void forward_l1()
 void forward_l2()
 {
 	int i, j;
-	__m256 w21p[16][2], l1p[2], l2m[16][2];
 	for (j = 0; j < 2; j++)
 	{
 		l1p[j] = _mm256_setr_ps(l1[j * 8], l1[j * 8 + 1], l1[j * 8 + 2], l1[j * 8 + 3], l1[j * 8 + 4], l1[j * 8 + 5], l1[j * 8 + 6], l1[j * 8 + 7]);
@@ -226,7 +241,6 @@ void forward_l2()
 void forward_l3()
 {
 	int i, j;
-	__m256 w32p[10][2], l2p[2], l3m[10][2];
 	for (j = 0; j < 2; j++)
 	{
 		l2p[j] = _mm256_setr_ps(l2[j * 8], l2[j * 8 + 1], l2[j * 8 + 2], l2[j * 8 + 3], l2[j * 8 + 4], l2[j * 8 + 5], l2[j * 8 + 6], l2[j * 8 + 7]);
@@ -262,20 +276,33 @@ void forward()
 	forward_l3();
 }
 
-void train()
+float db3[10];
+__m256 db3p[98], dw32[16][10], dw32p[10][2];
+
+void backprop_l3()
 {
-	load_train();
 	int i, j;
-	float cost = 0;
-	for (i = 0; i < 60000; i++)
+	y_3 = train_sets_lables[60000];
+	for (i = 0; i < 10; i++)
 	{
-		l0 = train_sets[i];
-		forward();
-		for (j = 0; j < 10; j++)
+		db3[i] = l3[i] * (1 - l3[i]) * (l3[i] - y_3[i]);
+	}
+	for (i = 0; i < 10; i++)
+	{
+		db3p[j] = _mm256_set1_ps(db3[i]);
+	}
+	for (i = 0; i < 10; i++)
+	{
+		for (j = 0; j < 2; j++)
 		{
-			cost += (l3[j] - train_sets_lables[i][j]) * (l3[j] - train_sets_lables[i][j]);
+			dw32p[i][j] = _mm256_mul_ps(l2p[j] * 2, db3p[i]);
 		}
 	}
+}
+
+void backprop()
+{
+	
 }
 
 void randomize()
@@ -290,10 +317,9 @@ void randomize()
 int main(int argc, char **argv)
 {
 	init();
-//	randomize();
-//	load_train();
-	train();
-//	l0 = train_sets[0];
-//	forward();
+	randomize();
+	load_train();
+	l0 = train_sets[0];
+	forward();
 	return 0;
 }
