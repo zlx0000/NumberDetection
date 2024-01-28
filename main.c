@@ -277,7 +277,7 @@ void forward()
 }
 
 float db3[10];
-__m256 db3p[98], dw32[16][10], dw32p[10][2];
+__m256 db3p[98], dw32[16][10], dw32p[10][2], dl2p[];
 
 void backprop_l3()
 {
@@ -296,6 +296,13 @@ void backprop_l3()
 		for (j = 0; j < 2; j++)
 		{
 			dw32p[i][j] = _mm256_mul_ps(l2p[j] * 2, db3p[i]);
+		}
+	}
+	for (i = 0; i < 16; i++)
+	{
+		for (j = 0; j < 10; j++)
+		{
+			
 		}
 	}
 }

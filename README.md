@@ -1,2 +1,1 @@
 # NumbersDetection
-dependencies: libfreeimage-dev
