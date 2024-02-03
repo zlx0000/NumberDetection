@@ -277,7 +277,7 @@ void forward()
 }
 
 float db3[10];
-__m256 db3p[98], dw32[16][10], dw32p[10][2], dl2p[2];
+__m256 db3p[10], dw32[16][10], dw32p[10][2], dl2p[2];
 
 void backprop_l3()
 {
@@ -289,7 +289,7 @@ void backprop_l3()
 	}
 	for (i = 0; i < 10; i++)
 	{
-		db3p[j] = _mm256_set1_ps(db3[i]);
+		db3p[i] = _mm256_set1_ps(db3[i]);
 	}
 	for (i = 0; i < 10; i++)
 	{
@@ -298,11 +298,13 @@ void backprop_l3()
 			dw32p[i][j] = _mm256_mul_ps(l2p[j] * 2, db3p[i]);
 		}
 	}
-	for (i = 0; i < 10; i++)
+	dl2p[0] = _mm256_mul_ps(dw32p[0][0], db3p[0]);
+	dl2p[1] = _mm256_mul_ps(dw32p[0][1], db3p[0]);
+	for (i = 1; i < 10; i++)
 	{
 		for (j = 0; j < 2; j++)
 		{
-			dl2p[j];
+			dl2p[j] = _mm256_fmadd_ps(dw32p[i][j], db3p[i], dl2p[j]);
 		}
 	}
 }
