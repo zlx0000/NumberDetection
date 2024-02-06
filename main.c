@@ -324,7 +324,9 @@ void backprop_l2()
 	{
 		db2p[i] = _mm256_set1_ps(db3[i]);
 	}
-	for (i = 0; i < 16; i++)
+	dl1p[0] = _mm256_mul_ps(dw21p[0][0], db2p[0]);
+	dl1p[1] = _mm256_mul_ps(dw21p[0][1], db2p[0]);
+	for (i = 1; i < 16; i++)
 	{
 		for (j = 0; j < 2; j++)
 		{
