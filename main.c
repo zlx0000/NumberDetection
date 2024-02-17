@@ -28,17 +28,20 @@ float train_sets_lables[60000][10] = {0};
 float *all[13002];
 float grad[13002];
 
-float sigmoid(float x)
+float
+sigmoid(float x)
 {
 	return 1 / (1 + exp(-1 * x));
 }
 
-float sigmoid_d(float x)
+float
+sigmoid_d(float x)
 {
 	return sigmoid(x) * (1 - sigmoid(x));
 }
 
-float ReLU(float x)
+float
+ReLU(float x)
 {
 	if (x <= 0.0)
 	{
@@ -50,7 +53,8 @@ float ReLU(float x)
 	}
 }
 
-void load_train()
+void
+load_train()
 {
 	int i, j;
 	unsigned char lable, pixel;
@@ -101,7 +105,8 @@ void load_file(const char *filenane)
 }
 */
 
-void init()
+void
+init()
 {
 	int i, j, k = 0;
 	for (i = 0; i < 16; i++)
@@ -145,35 +150,12 @@ void init()
 	}
 }
 
-/*
-void gradient_l1()
-{
-
-}
-
-void gradient_l2()
-{
-	
-}
-
-void gradient_l3()
-{
-	
-}
-
-void gradient()
-{
-	gradient_l1();
-	gradient_l2();
-	gradient_l3();
-}
-*/
-
 __m256 w10p[16][98], l0p[98], l1m[16][98];
 __m256 w21p[16][2], l1p[2], l2m[16][2];
 __m256 w32p[10][2], l2p[2], l3m[10][2];
 
-void forward_l1()
+void
+forward_l1()
 {
 	int i, j;
 	for (j = 0; j < 98; j++)
@@ -207,7 +189,8 @@ void forward_l1()
 	}
 }
 
-void forward_l2()
+void
+forward_l2()
 {
 	int i, j;
 	for (j = 0; j < 2; j++)
@@ -238,7 +221,8 @@ void forward_l2()
 	}
 }
 
-void forward_l3()
+void
+forward_l3()
 {
 	int i, j;
 	for (j = 0; j < 2; j++)
@@ -269,7 +253,8 @@ void forward_l3()
 	}
 }
 
-void forward()
+void
+forward()
 {
 	forward_l1();
 	forward_l2();
@@ -281,7 +266,8 @@ __m256 db3p[10], dw32[16][10], dw32p[10][2], dl2p[2];
 __m256 db2p[16], dw21[16][16], dw21p[16][2], dl1p[2];
 __m256 db1p[16], dw10[784][16], dw10p[98][2];
 
-void backprop_l3()
+void
+backprop_l3()
 {
 	int i, j;
 	y_3 = train_sets_lables[1];
@@ -311,7 +297,8 @@ void backprop_l3()
 	}
 }
 
-void backprop_l2()
+void
+backprop_l2()
 {
 	int i, j;
 	_mm256_store_ps(&y_1[0], dl1p[0]);
@@ -335,7 +322,8 @@ void backprop_l2()
 	}
 }
 
-void backprop_l1()
+void
+backprop_l1()
 {
 	int i, j;
 	_mm256_store_ps(&y_1[0], dl1p[0]);
@@ -366,14 +354,16 @@ void backprop_l1()
 	}
 }
 
-void backprop()
+void
+backprop()
 {
 	backprop_l3();
 	backprop_l2();
 	backprop_l1();
 }
 
-void randomize()
+void
+randomize()
 {
 	int i, j;
 	for (i = 0; i < 13002; i++)
@@ -382,7 +372,8 @@ void randomize()
 	}
 }
 
-int main(int argc, char **argv)
+int
+main(int argc, char **argv)
 {
 	init();
 	randomize();
