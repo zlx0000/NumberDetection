@@ -315,7 +315,7 @@ void backprop_l2()
 {
 	int i, j;
 	_mm256_store_ps(&y_1[0], dl1p[0]);
-	_mm256_store_ps(&y_1[7], dl1p[0]);
+	_mm256_store_ps(&y_1[8], dl1p[0]);
 	for (i = 0; i < 16; i++)
 	{
 		db2[i] = l2[i] * (1 - l2[i]) * (l2[i] - y_2[i]);
@@ -339,7 +339,7 @@ void backprop_l1()
 {
 	int i, j;
 	_mm256_store_ps(&y_1[0], dl1p[0]);
-	_mm256_store_ps(&y_1[7], dl1p[0]);
+	_mm256_store_ps(&y_1[8], dl1p[0]);
 	for (i = 0; i < 16; i++)
 	{
 		db2[i] = l2[i] * (1 - l2[i]) * (l2[i] - y_2[i]);
@@ -368,7 +368,9 @@ void backprop_l1()
 
 void backprop()
 {
-	
+	backprop_l3();
+	backprop_l2();
+	backprop_l1();
 }
 
 void randomize()
@@ -387,5 +389,6 @@ int main(int argc, char **argv)
 	load_train();
 	l0 = train_sets[0];
 	forward();
+	backprop();
 	return 0;
 }
