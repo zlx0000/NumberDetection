@@ -3,7 +3,6 @@
 #include <immintrin.h>
 #include <math.h>
 #include <pthread.h>
-// #include <FreeImage.h>
 
 float *l0;
 float l1[16];
@@ -84,22 +83,6 @@ void load_train()
 	}
 	fclose(fp_image_train);
 }
-
-/*
-void load_file(const char *filenane)
-{
-	int x, y, k = 0;
-	FIBITMAP *img = FreeImage_Load(FIF_BMP, filenane, BMP_DEFAULT);
-	for (y = 0; y < 28; y++)
-	{
-		for (x = 0; k < 28; x++)
-		{
-			l0[k] =
-				k++;
-		}
-	}
-}
-*/
 
 void init()
 {
