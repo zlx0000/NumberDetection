@@ -283,8 +283,6 @@ void backprop_l2()
 	{
 		db2p[i] = _mm256_set1_ps(db3[i]);
 	}
-	dl1p[0] = _mm256_mul_ps(dw21p[0][0], db2p[0]);
-	dl1p[1] = _mm256_mul_ps(dw21p[0][1], db2p[0]);
 	for (i = 1; i < 16; i++)
 	{
 		for (j = 0; j < 2; j++)
@@ -292,6 +290,8 @@ void backprop_l2()
 			dw21p[i][j] = _mm256_mul_ps(l1p[j] * 2, db2p[i]);
 		}
 	}
+	dl1p[0] = _mm256_mul_ps(dw21p[0][0], db2p[0]);
+	dl1p[1] = _mm256_mul_ps(dw21p[0][1], db2p[0]);
 }
 
 void backprop_l1()
@@ -311,16 +311,7 @@ void backprop_l1()
 	{
 		for (j = 0; j < 2; j++)
 		{
-			dw10p[i][j] = _mm256_mul_ps(l0p[j] * 2, db2p[i]);
-		}
-	}
-	dl1p[0] = _mm256_mul_ps(dw21p[0][0], db2p[0]);
-	dl1p[1] = _mm256_mul_ps(dw21p[0][1], db2p[0]);
-	for (i = 1; i < 16; i++)
-	{
-		for (j = 0; j < 2; j++)
-		{
-			dl1p[j] = _mm256_fmadd_ps(dw21p[i][j], db2p[i], dl1p[j]);
+			dw10p[i][j] = _mm256_mul_ps(l0p[j] * 2, db1p[i]);
 		}
 	}
 }
