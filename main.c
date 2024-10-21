@@ -273,8 +273,8 @@ void backprop_l3()
 void backprop_l2()
 {
 	int i, j;
-	_mm256_store_ps(&y_1[0], dl1p[0]);
-	_mm256_store_ps(&y_1[8], dl1p[1]);
+	_mm256_store_ps(&y_2[0], dl2p[0]);
+	_mm256_store_ps(&y_2[8], dl2p[1]);
 	for (i = 0; i < 16; i++)
 	{
 		db2[i] = l2[i] * (1 - l2[i]) * (l2[i] - y_2[i]);
@@ -301,11 +301,11 @@ void backprop_l1()
 	_mm256_store_ps(&y_1[8], dl1p[1]);
 	for (i = 0; i < 16; i++)
 	{
-		db2[i] = l2[i] * (1 - l2[i]) * (l2[i] - y_2[i]);
+		db1[i] = l2[i] * (1 - l2[i]) * (l2[i] - y_2[i]);
 	}
 	for (i = 0; i < 16; i++)
 	{
-		db2p[i] = _mm256_set1_ps(db3[i]);
+		db1p[i] = _mm256_set1_ps(db3[i]);
 	}
 	for (i = 0; i < 98; i++)
 	{
