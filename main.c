@@ -246,7 +246,7 @@ void backprop_l3()
 	y_3 = train_sets_lables[1];
 	for (i = 0; i < 10; i++)
 	{
-		db3[i] = l3[i] * (1 - l3[i]) * (l3[i] - y_3[i]);
+		db3[i] = l3[i] * (1 - l3[i]) * (l3[i] - y_3[i]); //Caculating the gradient.
 	}
 	for (i = 0; i < 10; i++)
 	{
@@ -260,7 +260,7 @@ void backprop_l3()
 		}
 	}
 	dl2p[0] = _mm256_mul_ps(dw32p[0][0], db3p[0]);
-	dl2p[1] = _mm256_mul_ps(dw32p[0][1], db3p[0]);
+	dl2p[1] = _mm256_mul_ps(dw32p[0][1], db3p[0]); //For the first iteration, we don't have to add the result from the previous multiplication.
 	for (i = 1; i < 10; i++)
 	{
 		for (j = 0; j < 2; j++)
