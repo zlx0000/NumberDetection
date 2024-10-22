@@ -234,7 +234,12 @@ void forward()
 	forward_l2();
 	forward_l3();
 }
-
+/*
+dbx: bias gradients of layer x;
+dwxy: weight gradients of nodes from layer x to layer y;
+dlx: activation gradients of layer x;
+The suffix -p denotes the data are store in a packed form in which contains eight 32-bit floats.
+*/
 float db3[10], db2[16], db1[16];
 __m256 db3p[10], dw32[16][10], dw32p[10][2], dl2p[2];
 __m256 db2p[16], dw21[16][16], dw21p[16][2], dl1p[2];
@@ -277,7 +282,7 @@ void backprop_l2()
 	//_mm256_store_ps(&y_2[8], dl2p[1]);
 	for (i = 0; i < 2; i++)
 	{
-		db2p[i] = _mm256_mul_ps(l2p[i], _mm256_mul_ps(1 - l2p[i], l2p[i] - dl2p[i]));
+		db2p[i] = _mm256_mul_ps(l2p[i], _mm256_mul_ps(1 - l2p[i], dl2p[i]));
 	}
 	/*
 	for (i = 0; i < 16; i++)
@@ -314,7 +319,7 @@ void backprop_l1()
 	//_mm256_store_ps(&y_1[8], dl1p[1]);
 	for (i = 0; i < 2; i++)
 	{
-		db1p[i] = _mm256_mul_ps(l1p[i], _mm256_mul_ps(1 - l1p[i], l1p[i] - dl1p[i]));
+		db1p[i] = _mm256_mul_ps(l1p[i], _mm256_mul_ps(1 - l1p[i], dl1p[i]));
 	}
 	/*
 	for (i = 0; i < 16; i++)
