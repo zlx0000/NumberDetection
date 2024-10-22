@@ -246,7 +246,7 @@ void backprop_l3()
 	y_3 = train_sets_lables[1];
 	for (i = 0; i < 10; i++)
 	{
-		db3[i] = l3[i] * (1 - l3[i]) * (l3[i] - y_3[i]); //Caculating the gradient. σ′(x)=σ(x)⋅(1−σ(x))
+		db3[i] = l3[i] * (1 - l3[i]) * (l3[i] - y_3[i]); //Caculating the bias gradient. σ′(x)=σ(x)⋅(1−σ(x)), b′=σ′*(l-y)
 	}
 	for (i = 0; i < 10; i++)
 	{
@@ -284,12 +284,12 @@ void backprop_l2()
 	{
 		db2[i] = l2[i] * (1 - l2[i]) * (l2[i] - y_2[i]);
 	}
-	*/
 	for (i = 0; i < 16; i++)
 	{
-		db2p[i] = _mm256_set1_ps(db3[i]);
+		db2p[i] = _mm256_set1_ps(db2[i]);
 	}
-	for (i = 1; i < 16; i++)
+	*/
+	for (i = 0; i < 16; i++)
 	{
 		for (j = 0; j < 2; j++)
 		{
@@ -298,6 +298,13 @@ void backprop_l2()
 	}
 	dl1p[0] = _mm256_mul_ps(dw21p[0][0], db2p[0]);
 	dl1p[1] = _mm256_mul_ps(dw21p[0][1], db2p[0]);
+	for (i = 1; i < 98; i++)
+	{
+		for (j = 0; j < 2; j++)
+		{
+			dl1p[j] = _mm256_fmadd_ps(dw21p[i][j], db2p[i], dl1p[j]);
+		}
+	}
 }
 
 void backprop_l1()
@@ -314,11 +321,11 @@ void backprop_l1()
 	{
 		db1[i] = l2[i] * (1 - l2[i]) * (l2[i] - y_2[i]);
 	}
-	*/
 	for (i = 0; i < 16; i++)
 	{
-		db1p[i] = _mm256_set1_ps(db3[i]);
+		db1p[i] = _mm256_set1_ps(db1[i]);
 	}
+	*/
 	for (i = 0; i < 98; i++)
 	{
 		for (j = 0; j < 2; j++)
@@ -333,6 +340,21 @@ void backprop()
 	backprop_l3();
 	backprop_l2();
 	backprop_l1();
+}
+
+void update_l1()
+{
+
+}
+
+void update_l2()
+{
+
+}
+
+void update_l3()
+{
+
 }
 
 void randomize()
