@@ -251,7 +251,7 @@ void backprop_l3()
 	y_3 = train_sets_lables[0];
 	for (i = 0; i < 10; i++)
 	{
-		db3[i] = l3[i] * (1 - l3[i]) * (l3[i] - y_3[i]); //Caculating the bias gradient. σ′(x)=σ(x)⋅(1−σ(x)), b′=σ′*(l-y)
+		db3[i] =2 * l3[i] * (1 - l3[i]) * (l3[i] - y_3[i]); //Caculating the bias gradient. σ′(x)=σ(x)⋅(1−σ(x)), b′=2*σ′*(l-y)
 	}
 	for (i = 0; i < 10; i++)
 	{
@@ -261,7 +261,7 @@ void backprop_l3()
 	{
 		for (j = 0; j < 2; j++)
 		{
-			dw32p[i][j] = _mm256_mul_ps(l2p[j] * 2, db3p[i]);
+			dw32p[i][j] = _mm256_mul_ps(l2p[j], db3p[i]);
 		}
 	}
 	dl2p[0] = _mm256_mul_ps(w32p[0][0], db3p[0]);
@@ -282,7 +282,7 @@ void backprop_l2()
 	//_mm256_store_ps(&y_2[8], dl2p[1]);
 	for (i = 0; i < 2; i++)
 	{
-		db2p[i] = _mm256_mul_ps(l2p[i], _mm256_mul_ps(1 - l2p[i], dl2p[i]));
+		db2p[i] = _mm256_mul_ps(_mm256_set1_ps(2), _mm256_mul_ps(l2p[i], _mm256_mul_ps(1 - l2p[i], dl2p[i])));
 	}
 	/*
 	for (i = 0; i < 16; i++)
@@ -298,7 +298,7 @@ void backprop_l2()
 	{
 		for (j = 0; j < 2; j++)
 		{
-			dw21p[i][j] = _mm256_mul_ps(l1p[j] * 2, db2p[i]);
+			dw21p[i][j] = _mm256_mul_ps(l1p[j], db2p[i]);
 		}
 	}
 	dl1p[0] = _mm256_mul_ps(w21p[0][0], db2p[0]);
@@ -319,7 +319,7 @@ void backprop_l1()
 	//_mm256_store_ps(&y_1[8], dl1p[1]);
 	for (i = 0; i < 2; i++)
 	{
-		db1p[i] = _mm256_mul_ps(l1p[i], _mm256_mul_ps(1 - l1p[i], dl1p[i]));
+		db1p[i] = _mm256_mul_ps(_mm256_set1_ps(2), _mm256_mul_ps(l1p[i], _mm256_mul_ps(1 - l1p[i], dl1p[i])));
 	}
 	/*
 	for (i = 0; i < 16; i++)
@@ -335,7 +335,7 @@ void backprop_l1()
 	{
 		for (j = 0; j < 2; j++)
 		{
-			dw10p[i][j] = _mm256_mul_ps(l0p[j] * 2, db1p[i]);
+			dw10p[i][j] = _mm256_mul_ps(l0p[j], db1p[i]);
 		}
 	}
 }
