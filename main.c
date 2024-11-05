@@ -279,12 +279,13 @@ void backprop_l3()
 void backprop_l2()
 {
 	int i, j;
+	__m256 one = _mm256_set1_ps(1.0f);
 	__m256 two = _mm256_set1_ps(2.0f);
 	//_mm256_store_ps(&y_2[0], dl2p[0]);
 	//_mm256_store_ps(&y_2[8], dl2p[1]);
 	for (i = 0; i < 2; i++)
 	{
-		db2p[i] = _mm256_mul_ps(two, _mm256_mul_ps(l2p[i], _mm256_mul_ps(1 - l2p[i], dl2p[i])));
+		db2p[i] = _mm256_mul_ps(two, _mm256_mul_ps(dl2p[i], _mm256_mul_ps(_mm256_sub_ps(one, l2p[i]), dl2p[i])));
 	}
 	/*
 	for (i = 0; i < 16; i++)
@@ -317,12 +318,13 @@ void backprop_l2()
 void backprop_l1()
 {
 	int i, j;
+	__m256 one = _mm256_set1_ps(1.0f);
 	__m256 two = _mm256_set1_ps(2.0f);
 	//_mm256_store_ps(&y_1[0], dl1p[0]);
 	//_mm256_store_ps(&y_1[8], dl1p[1]);
 	for (i = 0; i < 2; i++)
 	{
-		db1p[i] = _mm256_mul_ps(two, _mm256_mul_ps(l1p[i], _mm256_mul_ps(1 - l1p[i], dl1p[i])));
+		db1p[i] = _mm256_mul_ps(two, _mm256_mul_ps(dl1p[i], _mm256_mul_ps(_mm256_sub_ps(one, l1p[i]), dl1p[i])));
 	}
 	/*
 	for (i = 0; i < 16; i++)
