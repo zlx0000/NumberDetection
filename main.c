@@ -238,7 +238,7 @@ void forward()
 dbx: bias gradients of layer x;
 dwxy: weight gradients of nodes from layer x to layer y;
 dlx: activation gradients of layer x;
-The suffix -p denotes the data are store in a packed form in which contains eight 32-bit floats.
+The suffix -p denotes that the data are store in a packed form in which contains eight 32-bit floats.
 */
 float db3[10], db2[16], db1[16];
 __m256 db3p[10], dw32[16][10], dw32p[10][2], dl2p[2];
