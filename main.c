@@ -248,7 +248,7 @@ __m256 db1p[16], dw10[784][16], dw10p[98][2];
 void backprop_l3()
 {
 	int i, j;
-	y_3 = train_sets_lables[1];
+	y_3 = train_sets_lables[0];
 	for (i = 0; i < 10; i++)
 	{
 		db3[i] = l3[i] * (1 - l3[i]) * (l3[i] - y_3[i]); //Caculating the bias gradient. σ′(x)=σ(x)⋅(1−σ(x)), b′=σ′*(l-y)
@@ -264,13 +264,13 @@ void backprop_l3()
 			dw32p[i][j] = _mm256_mul_ps(l2p[j] * 2, db3p[i]);
 		}
 	}
-	dl2p[0] = _mm256_mul_ps(dw32p[0][0], db3p[0]);
-	dl2p[1] = _mm256_mul_ps(dw32p[0][1], db3p[0]); //For the first iteration, we don't have to add the result from the previous multiplication.
+	dl2p[0] = _mm256_mul_ps(w32p[0][0], db3p[0]);
+	dl2p[1] = _mm256_mul_ps(w32p[0][1], db3p[0]); //For the first iteration, we don't have to add the result from the previous multiplication.
 	for (i = 1; i < 10; i++)
 	{
 		for (j = 0; j < 2; j++)
 		{
-			dl2p[j] = _mm256_fmadd_ps(dw32p[i][j], db3p[i], dl2p[j]);
+			dl2p[j] = _mm256_fmadd_ps(w32p[i][j], db3p[i], dl2p[j]);
 		}
 	}
 }
@@ -301,13 +301,13 @@ void backprop_l2()
 			dw21p[i][j] = _mm256_mul_ps(l1p[j] * 2, db2p[i]);
 		}
 	}
-	dl1p[0] = _mm256_mul_ps(dw21p[0][0], db2p[0]);
-	dl1p[1] = _mm256_mul_ps(dw21p[0][1], db2p[0]);
+	dl1p[0] = _mm256_mul_ps(w21p[0][0], db2p[0]);
+	dl1p[1] = _mm256_mul_ps(w21p[0][1], db2p[0]);
 	for (i = 1; i < 98; i++)
 	{
 		for (j = 0; j < 2; j++)
 		{
-			dl1p[j] = _mm256_fmadd_ps(dw21p[i][j], db2p[i], dl1p[j]);
+			dl1p[j] = _mm256_fmadd_ps(w21p[i][j], db2p[i], dl1p[j]);
 		}
 	}
 }
