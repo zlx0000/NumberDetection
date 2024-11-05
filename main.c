@@ -252,7 +252,7 @@ void backprop_l3()
 	y_3 = train_sets_lables[0];
 	for (i = 0; i < 10; i++)
 	{
-		db3[i] =2 * l3[i] * (1 - l3[i]) * (l3[i] - y_3[i]); //Caculating the bias gradient. σ′(x)=σ(x)⋅(1−σ(x)), b′=2*σ′*(l-y)
+		db3[i] =2.0f * l3[i] * (1 - l3[i]) * (l3[i] - y_3[i]); //Caculating the bias gradient. σ′(x)=σ(x)⋅(1−σ(x)), b′=2*σ′*(l-y)
 	}
 	for (i = 0; i < 10; i++)
 	{
@@ -279,7 +279,7 @@ void backprop_l3()
 void backprop_l2()
 {
 	int i, j;
-	__m256 two = _mm256_set1_ps(2);
+	__m256 two = _mm256_set1_ps(2.0f);
 	//_mm256_store_ps(&y_2[0], dl2p[0]);
 	//_mm256_store_ps(&y_2[8], dl2p[1]);
 	for (i = 0; i < 2; i++)
@@ -317,7 +317,7 @@ void backprop_l2()
 void backprop_l1()
 {
 	int i, j;
-	__m256 two = _mm256_set1_ps(2);
+	__m256 two = _mm256_set1_ps(2.0f);
 	//_mm256_store_ps(&y_1[0], dl1p[0]);
 	//_mm256_store_ps(&y_1[8], dl1p[1]);
 	for (i = 0; i < 2; i++)
